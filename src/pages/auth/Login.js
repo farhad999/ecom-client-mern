@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function Login() {
   const dispatch = useDispatch();
@@ -36,7 +37,10 @@ function Login() {
       let { status, message } = payload;
 
       if (status === "success") {
+        toast.success("Login Success full");
         navigate("/");
+      } else {
+        toast.error(message);
       }
     });
   };
