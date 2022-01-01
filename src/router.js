@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login";
 import Home from "./pages/Home";
 import HomeLayout from "./layouts/HomeLayout";
 import AdminLayout from "./layouts/AdminLayout";
+import Categories from "./pages/admin/Categories";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,12 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <AdminLayout />,
+    children: [
+      {
+        path: "/admin/categories",
+        element: <Categories />,
+      },
+    ],
   },
   {
     path: "/login",

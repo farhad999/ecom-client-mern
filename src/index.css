@@ -15,3 +15,7 @@ code {
 .w-full{
   width: 100%;
 }
+
+.bg-gray{
+  background-color: rgb(245, 249, 251);
+}
