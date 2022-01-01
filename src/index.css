@@ -19,3 +19,11 @@ code {
 .bg-gray{
   background-color: rgb(245, 249, 251);
 }
+
+.text-lg{
+  font-size: 1.25rem;
+}
+
+.font-bold{
+  font-weight: bold;
+}
