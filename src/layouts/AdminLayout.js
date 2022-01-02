@@ -28,6 +28,11 @@ const AdminLayout = () => {
                   <Nav.Link>Categories</Nav.Link>
                 </LinkContainer>
               </Nav.Item>
+              <Nav.Item>
+                <LinkContainer to="/admin/brands">
+                  <Nav.Link>Brands</Nav.Link>
+                </LinkContainer>
+              </Nav.Item>
             </Nav>
           </Col>
           <Col>
