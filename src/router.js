@@ -5,6 +5,8 @@ import HomeLayout from "./layouts/HomeLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import Categories from "./pages/admin/Categories";
 import Brands from "./pages/admin/Brands";
+import Products from "./pages/admin/products/Products";
+import CreateProduct from "./pages/admin/products/CreateProduct";
 
 const router = createBrowserRouter([
     {
@@ -21,6 +23,17 @@ const router = createBrowserRouter([
             }, {
                 path: '/admin/brands',
                 element: <Brands/>
+            }, {
+                path: '/admin/products',
+                element: <Products/>,
+            },
+            {
+                path: '/admin/products/create/:id',
+                element: <CreateProduct/>
+            }
+            , {
+                path: '/admin/products/create',
+                element: <CreateProduct/>
             }
         ],
     },
