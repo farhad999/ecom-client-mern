@@ -4,6 +4,8 @@ import axiosClient from "../../utils/axiosClient";
 const initialState = {
     loading: true,
     products: [],
+    //
+    productDetails: '',
 };
 
 export const fetchProducts = createAsyncThunk("product/fetch", async () => {
@@ -23,6 +25,14 @@ export const deleteProducts = createAsyncThunk(
     "product/delete",
     async ({ id }) => {
         let res = await axiosClient.delete("/products/" + id);
+        return res.data;
+    }
+);
+
+export const viewProduct = createAsyncThunk(
+    "product/view",
+    async ({ id }) => {
+        let res = await axiosClient.get("/products/" + id);
         return res.data;
     }
 );
@@ -61,6 +71,15 @@ const productSlice = createSlice({
         [deleteProducts.rejected]: (state, action) => {
             console.log("error", action);
         },
+        [viewProduct.pending]: (state, action) => {
+
+        },
+        [viewProduct.fulfilled]: (state, action) => {
+            state.productDetails = action.payload.product;
+        },
+        [viewProduct.rejected]: (state, action) => {
+
+        }
     },
 });
 

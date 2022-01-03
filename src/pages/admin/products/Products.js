@@ -3,8 +3,8 @@ import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
 import {toast} from "react-hot-toast";
 import {Button, Modal, Form, Table, Card, Row, Col} from "react-bootstrap";
-import {Trash, Plus, PencilSquare} from 'react-bootstrap-icons'
-import {deleteProducts, fetchProducts} from "../../../store/slices/productSlice";
+import {Trash, Plus, PencilSquare, EyeFill} from 'react-bootstrap-icons'
+import {deleteProducts, fetchProducts, viewProduct} from "../../../store/slices/productSlice";
 import {LinkContainer} from "react-router-bootstrap";
 
 const Products = () => {
@@ -50,6 +50,12 @@ const Products = () => {
         setOpen(true);
     };
 
+    const view = (item) => {
+        //dispatch(viewProduct({id}));
+        setSelectedProduct(item);
+        setOpen(true);
+    }
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -63,7 +69,6 @@ const Products = () => {
                         <Plus size={24}/> Create
                     </Button>
                 </LinkContainer>
-
             </div>
 
             <div>
@@ -90,6 +95,11 @@ const Products = () => {
                             </div>
 
                             <div>
+
+                                <Button onClick={()=>view(product)}>
+                                    <EyeFill />
+                                </Button>
+
                                 <LinkContainer to={`/admin/products/create/${product._id}`}>
                                     <Button variant={'outline-primary'} onClick={() => selectAndOpenModal(product)}
                                             className={'mx-1'}>
@@ -107,6 +117,46 @@ const Products = () => {
                 ))}
 
             </div>
+
+            <Modal show={open} onHide={()=>setOpen(false)}>
+                <Modal.Header>
+                    <Modal.Title>View Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Table>
+                        <tr>
+                            <th>Product Name</th>
+                            <td>{selectedProduct.name}</td>
+                        </tr>
+                        <tr>
+                            <th>SKU</th>
+                            <td>{selectedProduct.sku}</td>
+                        </tr>
+                        <tr>
+                            <th>Stocks</th>
+                            <td>{selectedProduct.stocks}</td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>{selectedProduct.price}</td>
+                        </tr>
+                        <tr>
+                            <th>Offer Price</th>
+                            <td>{selectedProduct.offerPrice}</td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>{selectedProduct.category?.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Brand</th>
+                            <td>{selectedProduct.brand?.name}</td>
+                        </tr>
+                    </Table>
+                    <div className={'font-bold'}>Description</div>
+                    <div>{selectedProduct.description}</div>
+                </Modal.Body>
+            </Modal>
 
             <Modal
                 show={openDeleteDialog}

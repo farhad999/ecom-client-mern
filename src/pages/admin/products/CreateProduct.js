@@ -4,7 +4,7 @@ import {useForm, Controller} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchBrands} from "../../../store/slices/brandSlice";
 import {fetchCategories} from "../../../store/slices/categorySlice";
-import {createOrUpdateProduct} from "../../../store/slices/productSlice";
+import {createOrUpdateProduct, viewProduct} from "../../../store/slices/productSlice";
 import {toast} from "react-hot-toast";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
@@ -22,6 +22,12 @@ const CreateProduct = () => {
 
     const dispatch = useDispatch();
 
+    //catch param
+
+    const {id} = useParams();
+
+    console.log('id', id);
+
     const brandSchema = yup.object().shape({
         name: yup.string().required(),
         sku: yup.string(),
@@ -36,6 +42,16 @@ const CreateProduct = () => {
     const {register, handleSubmit, control, reset, formState: {errors}} = useForm({resolver: yupResolver(brandSchema)});
 
     React.useEffect(() => {
+
+        if(id){
+            dispatch(viewProduct({id})).then(({payload})=>{
+                const {product: {name, sku, price, stocks, offerPrice, category: {_id: category}, brand: {_id: brand}, description }, } = payload;
+                reset({name, sku, price, offerPrice, category, stocks,  brand, description});
+
+                console.log("description", description);
+
+            });
+        }
 
         if (!brands.length) {
             dispatch(fetchBrands());
@@ -83,7 +99,7 @@ const CreateProduct = () => {
                 <Card>
                     <Card.Header>
 
-                        <Card.Title>Create/Update Brand</Card.Title>
+                        <Card.Title>Create/Update Product</Card.Title>
 
                     </Card.Header>
 
@@ -184,12 +200,15 @@ const CreateProduct = () => {
                                 </Form.Group>
                             </Col>
                             <Col md={8} className={'my-2'}>
-                                <Form.Group>
-                                    <Form.Label>Description</Form.Label>
-                                    <Form.Control as={'textarea'} rows={3}
-                                                  {...register('description')}
-                                    />
-                                </Form.Group>
+                                <Controller render={({field})=>(
+                                    <Form.Group>
+                                        <Form.Label>Description</Form.Label>
+                                        <Form.Control as={'textarea'} rows={3}
+                                                      {...field}
+                                        />
+                                    </Form.Group>
+                                )} name={'description'} control={control} />
+
                             </Col>
                         </Row>
                     </Card.Body>
