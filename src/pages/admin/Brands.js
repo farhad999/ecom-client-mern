@@ -11,12 +11,14 @@ import {Trash, Plus} from 'react-bootstrap-icons'
 import {useForm, Controller} from "react-hook-form";
 import * as yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
+import {appConfig} from "../../configs/app";
+import ControllerInput from "../../components/ControllerInput";
 
 const Brands = () => {
     const [open, setOpen] = React.useState(false);
     const {brands, loading} = useSelector((state) => state.brand);
     const dispatch = useDispatch();
-    const [selectedCategory, setSelectedCategory] = React.useState("");
+    const [selectedBrand, setSelectedBrand] = React.useState("");
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
     const brandSchema = yup.object().shape({
@@ -24,7 +26,7 @@ const Brands = () => {
         description: yup.string(),
     });
 
-    const {register, handleSubmit, reset, formState: {errors}} = useForm({resolver: yupResolver(brandSchema)});
+    const {register, handleSubmit, reset, control, formState: {errors}} = useForm({resolver: yupResolver(brandSchema)});
 
     React.useEffect(() => {
         dispatch(fetchBrands());
@@ -37,10 +39,17 @@ const Brands = () => {
 
         formData.append('name', data.name);
         formData.append('description', data.name);
-        formData.append('image', data.image[0]);
 
-        if (selectedCategory) {
-            formData.append('id', selectedCategory._id);
+        console.log("images", data.image);
+
+        if(data.image.length) {
+
+            formData.append('image', data.image[0]);
+        }
+
+
+        if (selectedBrand) {
+            formData.append('id', selectedBrand._id);
         }
 
         dispatch(createOrUpdateBrand(formData))
@@ -57,7 +66,7 @@ const Brands = () => {
     };
 
     const deleteBrand = () => {
-        dispatch(deleteBrands({id: selectedCategory._id})).then(
+        dispatch(deleteBrands({id: selectedBrand._id})).then(
             ({payload}) => {
                 let {status, message} = payload;
 
@@ -70,25 +79,26 @@ const Brands = () => {
     };
 
     const selectAndOpenModal = (item) => {
-        let {name, image, description} = item;
+        let {name, description} = item;
 
         reset({
-                name, image, description
+                name, description
             }
         )
 
-        setSelectedCategory(item);
+        setSelectedBrand(item);
         setOpen(true);
     };
 
     const selectAndOpenDeleteModal = (item) => {
-        setSelectedCategory(item);
+        setSelectedBrand(item);
         setOpenDeleteDialog(true);
     };
 
     const resetAndOpenModal = () => {
-        setSelectedCategory(null);
+        setSelectedBrand(null);
         setOpen(true);
+        reset({});
     };
 
     if (loading) {
@@ -107,19 +117,18 @@ const Brands = () => {
             <div>
 
                 {brands.map((cat, index) => (
-                    <Card className={'my-1'}>
+                    <Card key={index} className={'my-1'}>
                         <Card.Body
-                            key={index}
                             className={'d-flex justify-content-between align-items-center'}
                         >
                             <div className={'d-flex align-items-center'}>
 
                                 <div style={{width: '70px', height: '70px', border: '1px solid #ededed'}}>
                                     <img style={{objectFit: 'contain', width: '100%', height: '100%'}}
-                                         src={"http://localhost:4000/uploads/" + cat.image} alt={'img'}/>
+                                         src={appConfig.imageSource + cat.image} alt={'img'}/>
                                 </div>
 
-                                <div className={'ml-2'}>{cat.name}</div>
+                                <div className={'ms-2'}>{cat.name}</div>
 
                             </div>
 
@@ -144,13 +153,9 @@ const Brands = () => {
                     </Modal.Header>
                     <Modal.Body>
 
-                        <Form.Group>
-                            <Form.Label>Brand Name*</Form.Label>
-                            <Form.Control
-                                {...register('name')}
-                                type={'text'}
-                            />
-                        </Form.Group>
+                        <ControllerInput control={control} name={'name'}
+                        label={'Brand Name*'} errors={errors} placeholder={'Brand Name'}
+                        />
 
                         <Form.Group>
                             <Form.Label>Brand Image</Form.Label>
@@ -170,7 +175,7 @@ const Brands = () => {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant={'outline-primary'}>Cancel</Button>
+                        <Button onClick={()=>setOpen(false)} variant={'outline-primary'}>Cancel</Button>
                         <Button type={'submit'}>Create</Button>
                     </Modal.Footer>
                 </form>
@@ -190,7 +195,7 @@ const Brands = () => {
                     <div>This Category will be deleted</div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button>Cancel</Button>
+                    <Button onClick={()=>setOpenDeleteDialog(false)}>Cancel</Button>
                     <Button onClick={deleteBrand} variant="danger">
                         Delete
                     </Button>
