@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #eddede;
 }
 
 code {
@@ -12,13 +13,20 @@ code {
     monospace;
 }
 
+
 .w-full{
   width: 100%;
+}
+
+.h-full{
+  height: 100%;
 }
 
 .bg-gray{
   background-color: rgb(245, 249, 251);
 }
+
+/* text-transform */
 
 .text-lg{
   font-size: 1.25rem;
@@ -26,4 +34,15 @@ code {
 
 .font-bold{
   font-weight: bold;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.product-image-container{
+  position: relative;
+  aspect-ratio: 1/1;
+  width: 100%;
+  overflow: hidden;
 }

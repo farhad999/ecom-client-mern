@@ -14,7 +14,9 @@ export const fetchCategories = createAsyncThunk("cat/fetch", async () => {
 export const createOrUpdateCategory = createAsyncThunk(
   "cat/create",
   async (data) => {
-    let res = await axiosClient.post("/categories", data);
+    let res = await axiosClient.post("/categories", data, {
+      'content-type': 'multipart/form-data'
+    });
     return res.data;
   }
 );

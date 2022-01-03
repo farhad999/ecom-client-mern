@@ -5,38 +5,63 @@ import {
     fetchCategories,
     deleteCategories, createOrUpdateCategory,
 } from "../../store/slices/categorySlice";
-import axiosClient from "../../utils/axiosClient";
 import {toast} from "react-hot-toast";
-import {Button, Modal, Form, Table, Card} from "react-bootstrap";
-import {Trash,Plus} from 'react-bootstrap-icons'
+import {Button, Modal, Form, Table, Card, Image} from "react-bootstrap";
+import {Trash, Plus, Controller} from 'react-bootstrap-icons'
+import * as yup from 'yup'
+import {yupResolver} from "@hookform/resolvers/yup";
+import {useForm} from "react-hook-form";
+import ControllerInput from "../../components/ControllerInput";
+import {appConfig} from "../../configs/app";
 
 const Categories = () => {
     const [open, setOpen] = React.useState(false);
     const {categories, loading} = useSelector((state) => state.cat);
     const dispatch = useDispatch();
-    const [inputCategoryName, setInputCategoryName] = React.useState("");
     const [selectedCategory, setSelectedCategory] = React.useState("");
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
+
+    //form
+
+    const categorySchema = yup.object().shape({
+        name: yup.string().required(),
+        description: yup.string(),
+        child: yup.string(),
+    });
+
+    const {handleSubmit, register, formState: {errors}, reset, control} = useForm({resolver: yupResolver(categorySchema)});
 
     React.useEffect(() => {
         dispatch(fetchCategories());
     }, []);
 
-    const createCategory = () => {
-        let data = {name: inputCategoryName};
+    const createCategory = (data) => {
 
-        if (selectedCategory) {
-            data.id = selectedCategory._id;
+        const {image, ...rest} = data;
+
+        const formData = new FormData();
+
+        if (image && image.length) {
+            formData.append('image', image[0]);
         }
 
-        dispatch(createOrUpdateCategory(data))
+        for (let key in rest) {
+            formData.append(key, rest[key]);
+        }
+
+        if (selectedCategory) {
+            formData.append('id', selectedCategory._id);
+        }
+
+        dispatch(createOrUpdateCategory(formData))
             .then(({payload}) => {
                 let {status, message} = payload;
 
                 if (status === "success") {
                     toast.success(message);
                     dispatch(fetchCategories());
-                    setInputCategoryName("");
+                    reset({});
                     setOpen(false);
                 }
             });
@@ -56,11 +81,10 @@ const Categories = () => {
     };
 
     const selectAndOpenModal = (item) => {
-        let {name} = item;
-
-        setInputCategoryName(name);
+        let {name, description} = item;
         setSelectedCategory(item);
         setOpen(true);
+        reset({name, description});
     };
 
     const selectAndOpenDeleteModal = (item) => {
@@ -69,6 +93,7 @@ const Categories = () => {
     };
 
     const resetAndOpenModal = () => {
+        reset({});
         setSelectedCategory(null);
         setOpen(true);
     };
@@ -77,24 +102,32 @@ const Categories = () => {
         return <div>Loading...</div>;
     }
 
+    console.log('errors', errors);
+
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between my-2">
                 <div className="text-lg font-bold">All Categories</div>
                 <Button onClick={resetAndOpenModal}>
-                    <Plus size={24} /> Create
+                    <Plus size={24}/> Create
                 </Button>
             </div>
 
             <div>
 
                 {categories.map((cat, index) => (
-                    <Card className={'my-1'}>
+                    <Card key={index} className={'my-1'}>
                         <Card.Body
-                            key={index}
+
                             className={'d-flex justify-content-between align-items-center'}
                         >
-                            <div>{cat.name}</div>
+                            <div className={'d-flex align-items-center'}>
+                                <div style={{width: '70px', height: '70px', border: '1px solid #eee'}} className={'position-relative'}>
+                                    <img className={'w-full h-full'} src={appConfig.imageSource+cat.image} />
+                                </div>
+                                <div className={'capitalize font-bold ms-2'}>{cat.name}</div>
+                            </div>
+
                             <div>
                                 <Button variant={'outline-primary'} onClick={() => selectAndOpenModal(cat)}
                                         className={'mx-1'}>Edit</Button>
@@ -110,25 +143,52 @@ const Categories = () => {
             </div>
 
             <Modal title={"Add Categories"} show={open} onHide={() => setOpen(false)}>
-                <Modal.Header>
-                    <Modal.Title>Create/Update Category</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <form>
-                        <Form.Group>
-                            <Form.Label>Category Name*</Form.Label>
-                            <Form.Control
-                                value={inputCategoryName}
-                                onChange={(event) => setInputCategoryName(event.target.value)}
-                            />
-                        </Form.Group>
 
-                    </form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant={'outline-primary'}>Cancel</Button>
-                    <Button onClick={createCategory}>Create</Button>
-                </Modal.Footer>
+                <form onSubmit={handleSubmit(createCategory)} encType={'multipart/form-data'}>
+
+                    <Modal.Header>
+                        <Modal.Title>Create/Update Category</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+
+
+                        <div className={'my-2'}>
+                            <ControllerInput
+                                label={'Category Name*'}
+                                name={'name'}
+                                errors={errors}
+                                placeholder={'Category Name'}
+                                control={control}
+
+                            />
+                        </div>
+
+                        <div className={'my-2'}>
+                            <Form.Group>
+                                <Form.Label>Image</Form.Label>
+                                <Form.Control type={'file'} {...register('image')} />
+                            </Form.Group>
+
+                        </div>
+
+                        <div className={'my-2'}>
+                            <ControllerInput
+                                label={'Description'}
+                                name={'description'}
+                                errors={errors}
+                                placeholder={'Description'}
+                                control={control}
+                                as={'textarea'}
+                            />
+                        </div>
+
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant={'outline-primary'}>Cancel</Button>
+                        <Button type={'submit'}>Create</Button>
+                    </Modal.Footer>
+                </form>
             </Modal>
 
             <Modal
