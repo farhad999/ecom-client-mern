@@ -9,6 +9,7 @@ import Products from "./pages/admin/products/Products";
 import CreateProduct from "./pages/admin/products/CreateProduct";
 import {default as ClientProducts} from './pages/Products'
 import Product from "./pages/Product";
+import Dashboard from "./pages/user/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -45,12 +46,15 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/product/:slug',
-                element: <Product />
+                element: <Product/>
             },
             {
                 path: '/products',
-                element: <ClientProducts />
-            },
+                element: <ClientProducts/>
+            }, {
+                path: '/user',
+                element: <Dashboard/>
+            }
         ]
     },
 ]);
