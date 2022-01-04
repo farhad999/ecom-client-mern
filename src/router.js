@@ -7,12 +7,10 @@ import Categories from "./pages/admin/Categories";
 import Brands from "./pages/admin/Brands";
 import Products from "./pages/admin/products/Products";
 import CreateProduct from "./pages/admin/products/CreateProduct";
+import {default as ClientProducts} from './pages/Products'
+import Product from "./pages/Product";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <HomeLayout/>,
-    },
     {
         path: "/admin",
         element: <AdminLayout/>,
@@ -28,7 +26,7 @@ const router = createBrowserRouter([
                 element: <Products/>,
             },
             {
-                path: '/admin/products/create/:id',
+                path: '/admin/products/create/:slug',
                 element: <CreateProduct/>
             }
             , {
@@ -40,6 +38,20 @@ const router = createBrowserRouter([
     {
         path: "/login",
         element: <Login/>,
+    },
+    {
+        path: "/",
+        element: <HomeLayout/>,
+        children: [
+            {
+                path: '/product/:slug',
+                element: <Product />
+            },
+            {
+                path: '/products',
+                element: <ClientProducts />
+            },
+        ]
     },
 ]);
 
