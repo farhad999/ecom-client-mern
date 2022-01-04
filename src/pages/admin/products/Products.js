@@ -100,8 +100,8 @@ const Products = () => {
                                     <EyeFill />
                                 </Button>
 
-                                <LinkContainer to={`/admin/products/create/${product._id}`}>
-                                    <Button variant={'outline-primary'} onClick={() => selectAndOpenModal(product)}
+                                <LinkContainer to={`/admin/products/create/${product.slug}`}>
+                                    <Button variant={'outline-primary'}
                                             className={'mx-1'}>
                                         <PencilSquare />
                                     </Button>

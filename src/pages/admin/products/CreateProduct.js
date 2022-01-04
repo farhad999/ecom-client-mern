@@ -24,9 +24,7 @@ const CreateProduct = () => {
 
     //catch param
 
-    const {id} = useParams();
-
-    console.log('id', id);
+    const {slug} = useParams();
 
     const brandSchema = yup.object().shape({
         name: yup.string().required(),
@@ -43,8 +41,8 @@ const CreateProduct = () => {
 
     React.useEffect(() => {
 
-        if(id){
-            dispatch(viewProduct({id})).then(({payload})=>{
+        if(slug){
+            dispatch(viewProduct({slug})).then(({payload})=>{
                 const {product: {name, sku, price, stocks, offerPrice, category: {_id: category}, brand: {_id: brand}, description }, } = payload;
                 reset({name, sku, price, offerPrice, category, stocks,  brand, description});
 
