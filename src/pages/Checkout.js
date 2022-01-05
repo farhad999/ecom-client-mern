@@ -23,6 +23,13 @@ const Checkout = () => {
     const dispatch = useDispatch();
 
     const getTotal = React.useMemo(() => {
+
+        if(!user.address){
+
+            toast.error('Please Updated your profile');
+            return  navigate('/user');
+        }
+
         return items.reduce((acc, item) => {
             acc += item.product.price * item.quantity;
             return acc;
@@ -43,6 +50,8 @@ const Checkout = () => {
                 console.log("response", res.data);
             })
     }
+
+
 
     return (
         <Container>

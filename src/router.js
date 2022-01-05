@@ -15,6 +15,7 @@ import ConfirmedOrder from "./pages/ConfirmedOrder";
 import MyOrders from "./pages/MyOrders";
 import Orders from "./pages/admin/Orders";
 import ProductsLayout from "./layouts/ProductsLayout";
+import Register from "./pages/auth/Register";
 
 const router = createBrowserRouter([
     {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
     {
         path: "/login",
         element: <Login/>,
+    },
+    {
+      path: '/register',
+      element: <Register />
     },
     {
         path: "/",

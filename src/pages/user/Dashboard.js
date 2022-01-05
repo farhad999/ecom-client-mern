@@ -4,7 +4,7 @@ import ControllerInput from "../../components/ControllerInput";
 import * as yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm} from "react-hook-form";
-import {Button} from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import axiosClient from "../../utils/axiosClient";
 import {toast} from 'react-hot-toast'
 
@@ -44,7 +44,8 @@ const Dashboard = () => {
     }
 
     return (
-        <div>
+        <Container>
+            <div className={'mt-3'}>
             Hello <strong>{user.name}</strong>
 
             <form onSubmit={handleSubmit(updateProfile)}>
@@ -75,8 +76,8 @@ const Dashboard = () => {
                     <Button type={'submit'}>Save</Button>
                 </div>
             </form>
-
-        </div>
+            </div>
+        </Container>
     )
 }
 
