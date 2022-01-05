@@ -33,6 +33,13 @@ const AdminLayout = () => {
                   <Nav.Link>Brands</Nav.Link>
                 </LinkContainer>
               </Nav.Item>
+
+              <Nav.Item>
+                <LinkContainer to="/admin/orders">
+                  <Nav.Link>Orders</Nav.Link>
+                </LinkContainer>
+              </Nav.Item>
+
             </Nav>
           </Col>
           <Col>
