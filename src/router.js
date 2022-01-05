@@ -9,7 +9,9 @@ import Products from "./pages/admin/products/Products";
 import CreateProduct from "./pages/admin/products/CreateProduct";
 import {default as ClientProducts} from './pages/Products'
 import Product from "./pages/Product";
+import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/user/Dashboard";
+import ConfirmedOrder from "./pages/ConfirmedOrder";
 
 const router = createBrowserRouter([
     {
@@ -52,8 +54,14 @@ const router = createBrowserRouter([
                 path: '/products',
                 element: <ClientProducts/>
             }, {
+                path: '/checkout',
+                element: <Checkout/>
+            }, {
                 path: '/user',
                 element: <Dashboard/>
+            }, {
+                path: '/confirmed-order',
+                element: <ConfirmedOrder/>
             }
         ]
     },

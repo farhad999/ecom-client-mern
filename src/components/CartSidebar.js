@@ -3,6 +3,7 @@ import {Button, Offcanvas} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {appConfig} from "../configs/app";
 import {removeFromCart} from "../store/slices/cartSlice";
+import {LinkContainer} from "react-router-bootstrap";
 
 const CartSidebar = ({show, onClose}) => {
 
@@ -49,7 +50,10 @@ const CartSidebar = ({show, onClose}) => {
                 <hr/>
                 <div>Total: {getTotal}</div>
                 <div>
-                    <Button>Checkout</Button>
+                    <LinkContainer to={'/checkout'}>
+                        <Button>Checkout</Button>
+                    </LinkContainer>
+
                 </div>
 
             </Offcanvas.Body>
