@@ -1,36 +1,36 @@
 import React from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate, Outlet} from "react-router-dom";
 import NavigationBar from "../components/NavigationBar";
 import ProductSidebar from "../components/ProductSidebar";
 import {Col, Container, Row} from "react-bootstrap";
+import {fetchCategories} from "../store/slices/categorySlice";
+import {fetchBrands} from "../store/slices/brandSlice";
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 const HomeLayout = () => {
     const navigate = useNavigate();
 
     const {user} = useSelector((state) => state.auth);
 
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(fetchCategories());
+        dispatch(fetchBrands());
+    }, []);
+
     if (user.role === "admin") {
         navigate("/admin", {replace: true});
     }
 
-    console.log('user', user);
-
     return (
         <div>
             <NavigationBar/>
-            <Container>
-                <Row className={'mt-3'}>
-                    <Col  md={3}>
-                        <ProductSidebar/>
-                    </Col>
-                    <Col md={9}>
-                        <div>
-                            <Outlet/>
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
+            <div>
+                <Outlet/>
+            </div>
         </div>
     )
 };

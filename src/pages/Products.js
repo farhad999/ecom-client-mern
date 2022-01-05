@@ -28,8 +28,8 @@ const Products = () => {
 
     return (
         <Container>
-            <div>
-                All Products
+            <div className={'text-lg font-bold my-2'}>
+                Products
             </div>
 
             <Row>

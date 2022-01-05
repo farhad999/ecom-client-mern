@@ -14,6 +14,7 @@ import Dashboard from "./pages/user/Dashboard";
 import ConfirmedOrder from "./pages/ConfirmedOrder";
 import MyOrders from "./pages/MyOrders";
 import Orders from "./pages/admin/Orders";
+import ProductsLayout from "./layouts/ProductsLayout";
 
 const router = createBrowserRouter([
     {
@@ -57,7 +58,13 @@ const router = createBrowserRouter([
             },
             {
                 path: '/products',
-                element: <ClientProducts/>
+                element: <ProductsLayout/>,
+                children: [
+                    {
+                        path: '/products',
+                        element: <ClientProducts/>
+                    }
+                ]
             }, {
                 path: '/checkout',
                 element: <Checkout/>
@@ -72,6 +79,9 @@ const router = createBrowserRouter([
             {
                 path: '/confirmed-order',
                 element: <ConfirmedOrder/>
+            }, {
+                path: "/",
+                element: <Home/>
             }
         ]
     },
