@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchCategories} from "../store/slices/categorySlice";
 import CategoryCard from "../components/CategoryCard";
 import {Col, Container, Row} from "react-bootstrap";
+import Carousel from "../components/Carousel";
 
 const Home = () => {
 
@@ -31,6 +32,7 @@ const Home = () => {
     return (
         <div>
 
+            <Carousel />
 
             <div className={'py-5'} style={{backgroundColor: '#ffdddf'}}>
                 <Container>
