@@ -34,7 +34,7 @@ const Products = () => {
 
             <Row>
                 {products.map((product, index) => (
-                    <Col key={index} sm={4} md={3}>
+                    <Col key={index} sm={4} md={3} xs={6}>
                         <ProductCard product={product}/>
                     </Col>
                 ))}

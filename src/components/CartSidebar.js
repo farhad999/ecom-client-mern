@@ -1,19 +1,16 @@
 import React from 'react'
 import {Button, Offcanvas} from "react-bootstrap";
-import {useDispatch, useSelector} from "react-redux";
-import {appConfig} from "../configs/app";
-import {removeFromCart} from "../store/slices/cartSlice";
+import {useSelector} from "react-redux";
 import {LinkContainer} from "react-router-bootstrap";
+import CartItem from "./CartItem";
 
 const CartSidebar = ({show, onClose}) => {
 
     const {items} = useSelector(state => state.cart);
 
-    const dispatch = useDispatch();
-
-    const getTotal = React.useMemo(()=> {
-        return items.reduce((acc, item)=> {
-            acc+=item.product.price * item.quantity;
+    const getTotal = React.useMemo(() => {
+        return items.reduce((acc, item) => {
+            acc += item.product.price * item.quantity;
             return acc;
         }, 0);
     }, [JSON.stringify(items)]);
@@ -24,38 +21,23 @@ const CartSidebar = ({show, onClose}) => {
                 <Offcanvas.Title>My Cart</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                {items.map((item, index) => (
-                    <div>
-                        <div className={'my-2 d-flex justify-content-between'}>
-                            <div className={'d-flex align-items-center'}>
-                                <div style={{width: '70px', height: '70px'}}>
-                                    <img className={'w-full h-full'} src={appConfig.imageSource + item.product.thumbImage}/>
-                                </div>
-                                <div>
-                                    <div>{item.product.name}</div>
-                                    <div>Qty: {item.quantity}</div>
-                                </div>
-                            </div>
-                            <div className={'ms-10'}>
-                                <div>{item.product.price}</div>
-                                <div>
-                                    <Button
-                                        onClick={()=>dispatch(removeFromCart({id: item._id}))}
-                                        variant={'danger'}>Remove</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                <hr/>
-                <div>Total: {getTotal}</div>
-                <div>
-                    <LinkContainer to={'/checkout'}>
-                        <Button>Checkout</Button>
-                    </LinkContainer>
-
+                <div style={{height: '75%', overflowY: 'auto'}}>
+                    {items.map((item, index) => (
+                        <CartItem key={index} item={item}/>
+                    ))}
                 </div>
-
+                <hr/>
+                <div>
+                    <div className={'d-flex align-items-center justify-content-between'}>
+                        <div className={'font-bold'}>Total</div>
+                        <div>{getTotal}</div>
+                    </div>
+                    <div className={'mt-2'}>
+                        <LinkContainer to={'/checkout'}>
+                            <Button disabled={!items.length} className={'w-full'}>Checkout</Button>
+                        </LinkContainer>
+                    </div>
+                </div>
             </Offcanvas.Body>
         </Offcanvas>
     )

@@ -1,11 +1,12 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Button, Card, Col, Modal, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
 import axiosClient from "../utils/axiosClient";
 import {appConfig} from "../configs/app";
 import {toast} from 'react-hot-toast'
 import {useNavigate} from "react-router-dom";
 import {clearCart} from "../store/slices/cartSlice";
+import CartItem from "../components/CartItem";
 
 const Checkout = () => {
 
@@ -44,28 +45,12 @@ const Checkout = () => {
     }
 
     return (
-        <div>
+        <Container>
 
-            <Row>
+            <Row className={'mt-2'}>
                 <Col md={8}>
                     {items.map((item, index) => (
-                        <div key={index}>
-                            <div className={'my-2 d-flex justify-content-between'}>
-                                <div className={'d-flex align-items-center'}>
-                                    <div style={{width: '70px', height: '70px'}}>
-                                        <img className={'w-full h-full'}
-                                             src={appConfig.imageSource + item.product.thumbImage}/>
-                                    </div>
-                                    <div>
-                                        <div>{item.product.name}</div>
-                                        <div>Qty: {item.quantity}</div>
-                                    </div>
-                                </div>
-                                <div className={'ms-10'}>
-                                    <div>{item.product.price}</div>
-                                </div>
-                            </div>
-                        </div>
+                        <CartItem key={index} item={item} />
                     ))}
                 </Col>
                 <Col md={4}>
@@ -108,14 +93,13 @@ const Checkout = () => {
                             </div>
 
 
-
                             <div className={'d-flex justify-content-between align-items-center'}>
                                 <div>Payment</div>
                                 <div>Cash on Delivery</div>
                             </div>
 
                             <div className={'my-2'}>
-                                <Button onClick={()=>setOpenModal(true)}>Place Order</Button>
+                                <Button disabled={!items.length} onClick={()=>setOpenModal(true)}>Place Order</Button>
                             </div>
                         </Card.Body>
                     </Card>
@@ -137,7 +121,7 @@ const Checkout = () => {
                 </Modal.Footer>
             </Modal>
 
-        </div>
+        </Container>
     )
 
 }

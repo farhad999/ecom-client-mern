@@ -10,7 +10,7 @@ const ProductCard = ({product}) => {
     const {_id: id, slug, thumbImage, price, offerPrice, name} = product;
 
     return (
-        <Card>
+        <Card className={'my-1'}>
             <Link to={`/product/${slug}`} className={'product-image-container'}>
                 <Card.Img variant="top" src={appConfig.imageSource + thumbImage}/>
             </Link>

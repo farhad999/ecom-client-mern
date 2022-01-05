@@ -7,7 +7,7 @@ import FormLabel from "react-bootstrap/esm/FormLabel";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/slices/authSlice";
+import {fetchUser, login} from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
@@ -38,6 +38,7 @@ function Login() {
 
       if (status === "success") {
         toast.success("Login Success full");
+        dispatch(fetchUser());
         navigate("/");
       } else {
         toast.error(message);

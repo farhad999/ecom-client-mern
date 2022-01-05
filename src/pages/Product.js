@@ -46,17 +46,17 @@ const Product = () => {
                     <Col md={8}>
                         <h2>{productDetails.name}</h2>
                         <div>
-                            <div>Brand: <Link to={`/products/${productDetails.brand?._id}`}>{productDetails.brand?.name} </Link> </div>
-                            <div>Category: <Link to={`/products/${productDetails.category?._id}`}>{productDetails.category?.name}</Link> </div>
+                            <div>Brand: <Link to={`/products?brand=${productDetails.brand?.slug}`}>{productDetails.brand?.name} </Link> </div>
+                            <div>Category: <Link to={`/products?category=${productDetails.category?.slug}`}>{productDetails.category?.name}</Link> </div>
                         </div>
 
                         <hr/>
 
                         <div>In Stock</div>
                         <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>{productDetails.offerPrice ? productDetails.offerPrice : productDetails.price}</div>
-                        <div>{productDetails.price}</div>
+                        <div className={'text-decoration-line-through'}>{productDetails.offerPrice && productDetails.price}</div>
 
-                        <Button onClick={addCart}>Add to Cart</Button>
+                        <Button className={'mt-3'} onClick={addCart}>Add to Cart</Button>
 
                     </Col>
                 </Row>

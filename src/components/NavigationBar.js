@@ -1,22 +1,27 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Button, Container, Dropdown, DropdownButton, FormControl, Navbar} from "react-bootstrap";
+import {Badge, Button, Container, Dropdown, DropdownButton, FormControl, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import {appConfig} from "../configs/app";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../store/slices/authSlice";
 import {getUserCart} from "../store/slices/cartSlice";
 import CartSidebar from "./CartSidebar";
+import IconButton from "./IconButton";
+import {Cart2} from "react-bootstrap-icons";
+import CartButton from "./CartButton";
 
 const NavigationBar = () => {
 
     const {user} = useSelector(state => state.auth);
 
+    const {items} = useSelector(state => state.cart);
+
     const [showCart, setShowCart] = React.useState(false);
 
     const dispatch = useDispatch();
 
-    React.useEffect(()=> {
+    React.useEffect(() => {
         dispatch(getUserCart());
     }, [user]);
 
@@ -25,11 +30,17 @@ const NavigationBar = () => {
             <div style={{backgroundColor: '#129ae8'}}>
                 <Container>
                     <div style={{height: '60px'}} className={'d-flex align-items-center justify-content-between'}>
-                        <Link className={'nav-link'} to={'/'}>{appConfig.appName}</Link>
-                        <FormControl style={{width: '400px'}} type={'text'} placeholder={'Search'}/>
+                        <Link className={'nav-link'} to={'/'}><h5
+                            className={'font-bold text-white'}>{appConfig.appName}</h5></Link>
+                        <FormControl className={'d-none d-md-block'} style={{width: '400px'}} type={'text'} placeholder={'Search'}/>
                         <div className={'d-flex align-items-center'}>
                             <div className={'mx-2 text-white'}>
-                                <Button onClick={()=>setShowCart(true)}>Cart</Button>
+
+                                {/* Cart Button */}
+
+                                <CartButton onClick={() => setShowCart(true)} count={items.length}/>
+
+
                             </div>
                             {
                                 user ? <Dropdown>
@@ -45,8 +56,8 @@ const NavigationBar = () => {
                                                 <Dropdown.Item>My Orders</Dropdown.Item>
                                             </LinkContainer>
 
-                                            <Dropdown.Divider />
-                                            <Dropdown.Item onClick={()=>dispatch(logout())}>Logout</Dropdown.Item>
+                                            <Dropdown.Divider/>
+                                            <Dropdown.Item onClick={() => dispatch(logout())}>Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     :
@@ -68,7 +79,7 @@ const NavigationBar = () => {
                 </Container>
             </div>
 
-            <CartSidebar show={showCart} onClose={()=>setShowCart(false)} />
+            <CartSidebar show={showCart} onClose={() => setShowCart(false)}/>
 
         </div>
     )
