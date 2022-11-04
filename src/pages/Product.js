@@ -4,6 +4,8 @@ import {viewProduct} from "../store/slices/productSlice";
 import {Link, useParams} from "react-router-dom";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {appConfig} from "../configs/app";
+import {addToCart} from "../store/slices/cartSlice";
+import {toast} from 'react-hot-toast'
 
 const Product = () => {
 
@@ -19,6 +21,18 @@ const Product = () => {
     if (loading) {
         console.log('loadingggg');
         return <div>loading</div>
+    }
+
+    function addCart() {
+        dispatch(addToCart({product: productDetails}))
+            .then(({payload})=> {
+                let {status, message} = payload;
+                if(status === 'success'){
+                    toast.success(message);
+                }else{
+                    toast.error(message);
+                }
+            })
     }
 
     return (
@@ -42,7 +56,7 @@ const Product = () => {
                         <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>{productDetails.offerPrice ? productDetails.offerPrice : productDetails.price}</div>
                         <div>{productDetails.price}</div>
 
-                        <Button>Add to Cart</Button>
+                        <Button onClick={addCart}>Add to Cart</Button>
 
                     </Col>
                 </Row>

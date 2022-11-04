@@ -5,13 +5,20 @@ import {LinkContainer} from "react-router-bootstrap";
 import {appConfig} from "../configs/app";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../store/slices/authSlice";
+import {getUserCart} from "../store/slices/cartSlice";
+import CartSidebar from "./CartSidebar";
 
 const NavigationBar = () => {
 
     const {user} = useSelector(state => state.auth);
 
+    const [showCart, setShowCart] = React.useState(false);
+
     const dispatch = useDispatch();
 
+    React.useEffect(()=> {
+        dispatch(getUserCart());
+    }, [user]);
 
     return (
         <div style={{boxShadow: '0px 0px 5px 5px #eee'}}>
@@ -21,7 +28,9 @@ const NavigationBar = () => {
                         <Link className={'nav-link'} to={'/'}>{appConfig.appName}</Link>
                         <FormControl style={{width: '400px'}} type={'text'} placeholder={'Search'}/>
                         <div className={'d-flex align-items-center'}>
-                            <div className={'mx-2 text-white'}>Cart</div>
+                            <div className={'mx-2 text-white'}>
+                                <Button onClick={()=>setShowCart(true)}>Cart</Button>
+                            </div>
                             {
                                 user ? <Dropdown>
                                         <Dropdown.Toggle variant={'outline-light'}>
@@ -53,6 +62,9 @@ const NavigationBar = () => {
                     </div>
                 </Container>
             </div>
+
+            <CartSidebar show={showCart} onClose={()=>setShowCart(false)} />
+
         </div>
     )
 }
