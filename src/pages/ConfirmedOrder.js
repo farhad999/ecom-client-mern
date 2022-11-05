@@ -6,7 +6,7 @@ const ConfirmedOrder = () => {
     return (
         <div>
             <h4>Order has been confirmed!</h4>
-            <LinkContainer to={'user/order'}>
+            <LinkContainer to={'/user/orders'}>
                 <Button>View Orders</Button>
             </LinkContainer>
             <LinkContainer to={'/'}>

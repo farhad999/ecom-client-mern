@@ -41,7 +41,10 @@ const NavigationBar = () => {
                                             <LinkContainer to={'/user'}>
                                                 <Dropdown.Item>Dashboard</Dropdown.Item>
                                             </LinkContainer>
-                                            <Dropdown.Item>My Orders</Dropdown.Item>
+                                            <LinkContainer to={'/user/orders'}>
+                                                <Dropdown.Item>My Orders</Dropdown.Item>
+                                            </LinkContainer>
+
                                             <Dropdown.Divider />
                                             <Dropdown.Item onClick={()=>dispatch(logout())}>Logout</Dropdown.Item>
                                         </Dropdown.Menu>
